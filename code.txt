@@ -1,0 +1,164 @@
+  "kind": "build_request",
+  "title": "AgroDetect AI – Plant Disease Classification Engine",
+  "projectName": "AgroDetect AI",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a backend data model and actor that stores plant disease records, each containing: disease name, affected crop type, description, symptoms, severity level (low/medium/high), and recommended corrective actions. Pre-populate the actor with at least 20 well-known plant diseases across common crops (tomato, potato, corn, wheat, rice, apple).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "classify plant diseases from leaf images",
+          "accurately detects crop diseases"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend actor stores disease records with all required fields.",
+        "At least 20 disease entries across 6+ crop types are pre-populated.",
+        "A query function returns all diseases filterable by crop type."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement a backend classification function that accepts a crop type and a simulated image input (base64 string or metadata), and returns a classification result containing: detected disease name, confidence score (0–100%), severity level, symptoms, and recommended actions. Use deterministic heuristic logic based on crop type and input hash to simulate CNN/transfer learning classification in the absence of a real ML runtime.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "leveraging pre-trained CNN models",
+          "system accurately detects crop diseases"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A callable backend function accepts crop type and image data and returns a classification result.",
+        "The result includes disease name, confidence score, severity, symptoms, and recommended actions.",
+        "Different inputs yield varied but deterministic disease classifications."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Build a leaf image upload interface on the frontend where users can: select a crop type from a dropdown (tomato, potato, corn, wheat, rice, apple), upload or drag-and-drop a leaf image file, and preview the uploaded image before submitting for analysis.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "classify plant diseases from leaf images",
+          "Support for multiple crop types"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A crop type selector dropdown is present with at least 6 crop options.",
+        "Users can upload a leaf image via file input or drag-and-drop.",
+        "The uploaded image preview is shown before analysis is triggered.",
+        "A clearly labeled 'Analyze' or 'Detect Disease' button submits the request."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Display the classification results after analysis in a dedicated results panel. The results must show: the detected disease name prominently, a visual confidence score bar (percentage), the severity level with a color-coded badge (green=low, orange=medium, red=high), a list of observed symptoms, and a list of recommended corrective actions with actionable bullet points.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Display classification results with disease name, confidence score, and recommended actions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Disease name is displayed prominently in the results panel.",
+        "Confidence score is shown as a percentage with a visual progress bar.",
+        "Severity badge is color-coded: green for low, orange for medium, red for high.",
+        "Symptoms and recommended actions are listed clearly.",
+        "Results panel appears after analysis completes and replaces a loading state."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add a disease library/reference section accessible from the main navigation that lists all known diseases stored in the backend, grouped by crop type. Each entry should be expandable to show symptoms, severity, and recommended actions.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "helping farmers and agricultural experts take early corrective actions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A disease library page or section is accessible from the navigation.",
+        "Diseases are grouped or filterable by crop type.",
+        "Each disease entry is expandable to reveal full details.",
+        "Library data is fetched from the backend."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Store a history of past analyses in the backend per session (anonymous), recording: crop type, timestamp, detected disease name, confidence score, and severity. Display this scan history in a dedicated 'Scan History' view on the frontend with the ability to re-view past results.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "helping farmers and agricultural experts take early corrective actions and improve yield quality"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each analysis submission is persisted in the backend with all required fields.",
+        "A Scan History view lists all past analyses sorted by most recent.",
+        "Clicking a history entry re-displays the full result details.",
+        "Timestamps are displayed in a human-readable format."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Apply a cohesive agricultural-themed visual design across the app: earthy greens and warm ambers as the primary palette, clean sans-serif typography, card-based layouts for results and disease entries, and subtle leaf or nature-inspired decorative elements. The design should feel professional and accessible to farmers and agricultural experts.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "agroDetect AI",
+          "farmers and agricultural experts"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Primary color palette uses earthy greens and warm ambers consistently.",
+        "Card-based layout is used for disease results and library entries.",
+        "Typography is clean and readable on all screen sizes.",
+        "At least one nature/leaf-inspired decorative visual element is present in the UI."
+      ]
+    }
+  ],
+  "constraints": [
+    "No real ML runtime or external AI API integrations are available; disease classification must be simulated using deterministic backend logic.",
+    "All data must be stored in the Motoko backend actor — no external databases.",
+    "Do not modify any files under frontend/src/hooks/ or frontend/src/components/ui."
+  ],
+  "nonGoals": [
+    "Real CNN/deep learning inference or model loading.",
+    "Integration with external AI/ML services (OpenAI, TensorFlow Serving, etc.).",
+    "User authentication or Internet Identity login.",
+    "Real-time image processing or camera capture.",
+    "Multi-language support.",
+    "Mobile app version."
+  ],
+  "imageRequirements": {
+    "required": [
+      "AgroDetect AI app logo with a stylized green leaf and magnifying glass icon on a dark green background (agrodetect-logo.dim_256x256.png)",
+      "Hero banner with a lush agricultural field of crops under golden sunlight, wide landscape format (hero-banner.dim_1440x400.png)",
+      "Illustrated placeholder for leaf image upload zone showing a single green leaf with dotted border and upload arrow (upload-placeholder.dim_400x300.png)"
+    ],
+    "edits": []
+  }
+}
