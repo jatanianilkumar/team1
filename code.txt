@@ -1,4 +1,5 @@
-  "kind": "build_request",
+code 2 
+ "kind": "build_request",
   "title": "AgroDetect AI – Plant Disease Classification Engine",
   "projectName": "AgroDetect AI",
   "priority": "normal",
@@ -162,3 +163,781 @@
     "edits": []
   }
 }
+
+code 1
+{
+  "backend/main.mo": "Motoko actor that includes a blob storage mixin and manages a mutable list of file names with addFile and removeFile methods.",
+  "feature_evidence.json": "Feature evidence report mapping feature IDs (image upload, classification results, disease library, scan history) to their implementing frontend files, component dependencies, and test IDs.",
+  "frontend-file-summaries.txt": "JSON dictionary of one-line summaries for each frontend source file, covering styles, data utilities, hooks, components, and pages.",
+  "frontend/index.css": "Tailwind base stylesheet defining OKLCH-based CSS custom properties for light and dark themes including colors, borders, charts, and sidebar tokens.",
+  "frontend/index.html": "Minimal HTML entry point titled 'AgroDetect AI' that mounts the React app into a root div and loads the main TSX module.",
+  "frontend/src/App.tsx": "Sets up TanStack Router with three routes (/, /library, /history) wrapped in the Layout component, rendering AnalyzePage, DiseaseLibraryPage, and ScanHistoryPage respectively.",
+  "frontend/src/components/ClassificationResults.tsx": "Results panel component that displays the detected disease name, an animated confidence progress bar, a severity badge, symptoms list, and recommended actions with a reset button.",
+  "frontend/src/components/DiseaseCard.tsx": "Expandable card component that shows a disease's name, severity badge, description, and collapsible symptoms and recommended actions sections.",
+  "frontend/src/components/ImageUpload.tsx": "Leaf image upload component featuring a crop type dropdown, drag-and-drop/file-input zone, image preview with removal, and an analyze button that triggers disease classification.",
+  "frontend/src/components/Layout.tsx": "Defines the main app layout with a sticky header, logo, desktop nav links (Analyze, Disease Library, Scan History), and a collapsible mobile menu.",
+  "frontend/src/components/SeverityBadge.tsx": "Renders a colored badge pill displaying low/medium/high risk severity levels with a matching dot indicator.",
+  "frontend/src/hooks/useActor.ts": "Custom hook that creates and caches an ICP backend actor (authenticated or anonymous) using React Query, invalidating dependent queries when the identity changes.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Provides an Internet Identity authentication context and provider using DFINITY's AuthClient, exposing login, logout, identity, and status state to child components.",
+  "frontend/src/hooks/useQueries.ts": "Exports React Query hooks for fetching the disease database, reading/clearing localStorage scan history, and running the disease classification mutation.",
+  "frontend/src/index.css": "Global stylesheet defining an agricultural green OKLCH color palette with light/dark themes, Tailwind base/component layers, and utility classes for severity badges and cards.",
+  "frontend/src/lib/diseaseData.ts": "Contains the static disease database (types, crop list, and detailed disease entries with symptoms and recommended actions) plus helper functions for classification and scan history persistence.",
+  "frontend/src/main.tsx": "App entry point that mounts the React tree wrapped with QueryClientProvider and InternetIdentityProvider.",
+  "frontend/src/pages/AnalyzePage.tsx": "Main analysis page featuring a hero banner, feature highlights, image upload component, and classification results display for plant disease detection.",
+  "frontend/src/pages/DiseaseLibraryPage.tsx": "Disease library page with search and crop-type filter controls that fetches and displays diseases grouped by crop type using DiseaseCard components.",
+  "frontend/src/pages/ScanHistoryPage.tsx": "Scan history page that lists past analysis entries as expandable cards with image thumbnails, confidence bars, severity badges, and a clear-history action.",
+  "frontend/tailwind.config.js": "Tailwind CSS configuration extending the default theme with custom OKLCH-based color tokens, typography/display fonts, border radii, box shadows, and animation keyframes.",
+  "project_state.json": "Project state manifest describing AgroDetect AI's architecture, implemented features, image asset requirements, and versioning metadata for the plant disease classification app."
+}
+
+code 3
+
+{
+  "templates": {
+    "declaration_generator": "0.1.0",
+    "build_template": "1.0.0"
+  },
+  "components": {
+    "blob-storage": "4.0.0",
+    "core-infrastructure": "1.0.2",
+    "shadcn-ui": "1.0.0",
+    "build-template-react": "1.0.0",
+    "initial-app": "1.0.0",
+    "github-export-icp-cli": "1.0.0"
+  },
+  "tags": [],
+  "aiCoreVersion": "0.20.4",
+  "motokoVersion": "1.0.0-beta",
+  "coreLibVersion": "implicits-20"
+}
+
+code 4
+
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-26T04:48:10.827Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 7,
+    "implemented": 5,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Create a backend data model and actor that stores plant disease records, each containing: disease name, affected crop type, description, symptoms, severity level (low/medium/high), and recommended corrective actions. Pre-populate the actor with at least 20 well-known plant diseases across common crops (tomato, potato, corn, wheat, rice, apple).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Implement a backend classification function that accepts a crop type and a simulated image input (base64 string or metadata), and returns a classification result containing: detected disease name, confidence score (0–100%), severity level, symptoms, and recommended actions. Use deterministic heuristic logic based on crop type and input hash to simulate CNN/transfer learning classification in the absence of a real ML runtime.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Build a leaf image upload interface on the frontend where users can: select a crop type from a dropdown (tomato, potato, corn, wheat, rice, apple), upload or drag-and-drop a leaf image file, and preview the uploaded image before submitting for analysis.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ImageUpload.tsx",
+          "frontend/src/pages/AnalyzePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ImageUpload.tsx",
+          "frontend/src/pages/AnalyzePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Display the classification results after analysis in a dedicated results panel. The results must show: the detected disease name prominently, a visual confidence score bar (percentage), the severity level with a color-coded badge (green=low, orange=medium, red=high), a list of observed symptoms, and a list of recommended corrective actions with actionable bullet points.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ClassificationResults.tsx",
+          "frontend/src/pages/AnalyzePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ClassificationResults.tsx",
+          "frontend/src/pages/AnalyzePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Add a disease library/reference section accessible from the main navigation that lists all known diseases stored in the backend, grouped by crop type. Each entry should be expandable to show symptoms, severity, and recommended actions.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/DiseaseLibraryPage.tsx",
+          "frontend/src/components/DiseaseCard.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/DiseaseLibraryPage.tsx",
+          "frontend/src/components/DiseaseCard.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Store a history of past analyses in the backend per session (anonymous), recording: crop type, timestamp, detected disease name, confidence score, and severity. Display this scan history in a dedicated 'Scan History' view on the frontend with the ability to re-view past results.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ScanHistoryPage.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/ScanHistoryPage.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Apply a cohesive agricultural-themed visual design across the app: earthy greens and warm ambers as the primary palette, clean sans-serif typography, card-based layouts for results and disease entries, and subtle leaf or nature-inspired decorative elements. The design should feel professional and accessible to farmers and agricultural experts.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/tailwind.config.js",
+          "frontend/src/index.css",
+          "frontend/src/components/Layout.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/tailwind.config.js",
+          "frontend/src/index.css",
+          "frontend/src/components/Layout.tsx",
+          "frontend/src/App.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/blob-storage/Mixin.mo",
+    "backend/blob-storage/Storage.mo",
+    "backend/main.mo",
+    "build-request.json",
+    "build-template/Dockerfile",
+    "build-template/LICENSE",
+    "build-template/README.md",
+    "build-template/deploy.sh",
+    "build-template/icp.yaml",
+    "build-template/package.json",
+    "build-template/pnpm-lock.yaml",
+    "build-template/pnpm-workspace.yaml",
+    "build-template/scripts/prune-unused-images.js",
+    "build-template/scripts/resize-images.js",
+    "build-template/src/backend/canister.yaml",
+    "build-template/src/backend/system-idl/aaaaa-aa.did",
+    "build-template/src/frontend/canister.yaml",
+    "build-template/src/frontend/components.json",
+    "build-template/src/frontend/env.json",
+    "build-template/src/frontend/eslint-rules/no-bigint-in-query-keys.js",
+    "build-template/src/frontend/eslint-rules/require-internet-identity-provider.js",
+    "build-template/src/frontend/eslint.config.js",
+    "build-template/src/frontend/package.json",
+    "build-template/src/frontend/postcss.config.js",
+    "build-template/src/frontend/src/components/ui/accordion.tsx",
+    "build-template/src/frontend/src/components/ui/alert-dialog.tsx",
+    "build-template/src/frontend/src/components/ui/alert.tsx",
+    "build-template/src/frontend/src/components/ui/aspect-ratio.tsx",
+    "build-template/src/frontend/src/components/ui/avatar.tsx",
+    "build-template/src/frontend/src/components/ui/badge.tsx",
+    "build-template/src/frontend/src/components/ui/breadcrumb.tsx",
+    "build-template/src/frontend/src/components/ui/button.tsx",
+    "build-template/src/frontend/src/components/ui/calendar.tsx",
+    "build-template/src/frontend/src/components/ui/card.tsx",
+    "build-template/src/frontend/src/components/ui/carousel.tsx",
+    "build-template/src/frontend/src/components/ui/chart.tsx",
+    "build-template/src/frontend/src/components/ui/checkbox.tsx",
+    "build-template/src/frontend/src/components/ui/collapsible.tsx",
+    "build-template/src/frontend/src/components/ui/command.tsx",
+    "build-template/src/frontend/src/components/ui/context-menu.tsx",
+    "build-template/src/frontend/src/components/ui/dialog.tsx",
+    "build-template/src/frontend/src/components/ui/drawer.tsx",
+    "build-template/src/frontend/src/components/ui/dropdown-menu.tsx",
+    "build-template/src/frontend/src/components/ui/form.tsx",
+    "build-template/src/frontend/src/components/ui/hover-card.tsx",
+    "build-template/src/frontend/src/components/ui/input-otp.tsx",
+    "build-template/src/frontend/src/components/ui/input.tsx",
+    "build-template/src/frontend/src/components/ui/label.tsx",
+    "build-template/src/frontend/src/components/ui/menubar.tsx",
+    "build-template/src/frontend/src/components/ui/navigation-menu.tsx",
+    "build-template/src/frontend/src/components/ui/pagination.tsx",
+    "build-template/src/frontend/src/components/ui/popover.tsx",
+    "build-template/src/frontend/src/components/ui/progress.tsx",
+    "build-template/src/frontend/src/components/ui/radio-group.tsx",
+    "build-template/src/frontend/src/components/ui/resizable.tsx",
+    "build-template/src/frontend/src/components/ui/scroll-area.tsx",
+    "build-template/src/frontend/src/components/ui/select.tsx",
+    "build-template/src/frontend/src/components/ui/separator.tsx",
+    "build-template/src/frontend/src/components/ui/sheet.tsx",
+    "build-template/src/frontend/src/components/ui/sidebar.tsx",
+    "build-template/src/frontend/src/components/ui/skeleton.tsx",
+    "build-template/src/frontend/src/components/ui/slider.tsx",
+    "build-template/src/frontend/src/components/ui/sonner.tsx",
+    "build-template/src/frontend/src/components/ui/switch.tsx",
+    "build-template/src/frontend/src/components/ui/table.tsx",
+    "build-template/src/frontend/src/components/ui/tabs.tsx",
+    "build-template/src/frontend/src/components/ui/textarea.tsx",
+    "build-template/src/frontend/src/components/ui/toggle-group.tsx",
+    "build-template/src/frontend/src/components/ui/toggle.tsx",
+    "build-template/src/frontend/src/components/ui/tooltip.tsx",
+    "build-template/src/frontend/src/hooks/use-mobile.tsx",
+    "build-template/src/frontend/src/lib/utils.ts",
+    "build-template/src/frontend/tsconfig.json",
+    "build-template/src/frontend/vite.config.js",
+    "build-template/tsconfig.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/public/assets/generated/agrodetect-logo.dim_256x256.png",
+    "frontend/public/assets/generated/hero-banner.dim_1440x400.png",
+    "frontend/public/assets/generated/upload-placeholder.dim_400x300.png",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/ClassificationResults.tsx",
+    "frontend/src/components/DiseaseCard.tsx",
+    "frontend/src/components/ImageUpload.tsx",
+    "frontend/src/components/Layout.tsx",
+    "frontend/src/components/SeverityBadge.tsx",
+    "frontend/src/config.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/diseaseData.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AnalyzePage.tsx",
+    "frontend/src/pages/DiseaseLibraryPage.tsx",
+    "frontend/src/pages/ScanHistoryPage.tsx",
+    "frontend/src/ui-summary.json",
+    "frontend/src/utils/StorageClient.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}
+
+code 5
+
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-build-a-leaf-image-upload-interface-on-the-frontend-where-users-can-select-a-crop-type-from-a-dropdown-tomato-potato-corn-wheat-rice-apple-upload-or-drag-and-drop-a-leaf-image-file-and-preview-the-uploaded-image-before-submitting-for-analysis",
+      "featureTitle": "Build a leaf image upload interface on the frontend where users can: select a crop type from a dropdown (tomato, potato, corn, wheat, rice, apple), upload or drag-and-drop a leaf image file, and preview the uploaded image before submitting for analysis.",
+      "files": [
+        "frontend/src/components/ImageUpload.tsx",
+        "frontend/src/pages/AnalyzePage.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-the-classification-results-after-analysis-in-a-dedicated-results-panel-the-results-must-show-the-detected-disease-name-prominently-a-visual-confidence-score-bar-percentage-the-severity-level-with-a-color-coded-badge-green-low-orange-medium-red-high-a-list-of-observed-symptoms-and-a-list-of-recommended-corrective-actions-with-actionable-bullet-points",
+      "featureTitle": "Display the classification results after analysis in a dedicated results panel. The results must show: the detected disease name prominently, a visual confidence score bar (percentage), the severity level with a color-coded badge (green=low, orange=medium, red=high), a list of observed symptoms, and a list of recommended corrective actions with actionable bullet points.",
+      "files": [
+        "frontend/src/components/ClassificationResults.tsx",
+        "frontend/src/pages/AnalyzePage.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-disease-library-reference-section-accessible-from-the-main-navigation-that-lists-all-known-diseases-stored-in-the-backend-grouped-by-crop-type-each-entry-should-be-expandable-to-show-symptoms-severity-and-recommended-actions",
+      "featureTitle": "Add a disease library/reference section accessible from the main navigation that lists all known diseases stored in the backend, grouped by crop type. Each entry should be expandable to show symptoms, severity, and recommended actions.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/DiseaseCard.tsx",
+        "frontend/src/pages/DiseaseLibraryPage.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-store-a-history-of-past-analyses-in-the-backend-per-session-anonymous-recording-crop-type-timestamp-detected-disease-name-confidence-score-and-severity-display-this-scan-history-in-a-dedicated-scan-history-view-on-the-frontend-with-the-ability-to-re-view-past-results",
+      "featureTitle": "Store a history of past analyses in the backend per session (anonymous), recording: crop type, timestamp, detected disease name, confidence score, and severity. Display this scan history in a dedicated 'Scan History' view on the frontend with the ability to re-view past results.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/ScanHistoryPage.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-cohesive-agricultural-themed-visual-design-across-the-app-earthy-greens-and-warm-ambers-as-the-primary-palette-clean-sans-serif-typography-card-based-layouts-for-results-and-disease-entries-and-subtle-leaf-or-nature-inspired-decorative-elements-the-design-should-feel-professional-and-accessible-to-farmers-and-agricultural-experts",
+      "featureTitle": "Apply a cohesive agricultural-themed visual design across the app: earthy greens and warm ambers as the primary palette, clean sans-serif typography, card-based layouts for results and disease entries, and subtle leaf or nature-inspired decorative elements. The design should feel professional and accessible to farmers and agricultural experts.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
+
+code 6
+
+
+  "frontend/src/index.css": "Global styles with agricultural OKLCH color system featuring earthy forest greens and warm ambers, custom font imports (Inter + Playfair Display), severity badge utility classes, and card component styles.",
+  "frontend/tailwind.config.js": "Extended Tailwind config with custom agricultural color palette, Inter/Playfair Display font families, severity color tokens, enhanced border radius and shadow scales, and fade-in animation.",
+  "frontend/src/lib/diseaseData.ts": "Complete static disease database with 20+ diseases across 6 crop types, deterministic classification simulation, localStorage-based scan history management, and utility functions for formatting.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for disease data fetching, disease classification mutation with simulated async delay, and scan history CRUD operations using localStorage.",
+  "frontend/src/components/Layout.tsx": "App shell with sticky header, AgroDetect AI branding, responsive navigation (desktop + mobile), and footer with caffeine.ai attribution and dynamic year.",
+  "frontend/src/components/SeverityBadge.tsx": "Reusable color-coded severity badge component supporting low (green), medium (amber), and high (red) risk levels with dot indicator.",
+  "frontend/src/components/DiseaseCard.tsx": "Expandable disease card showing name, severity badge, description, and collapsible symptoms/recommended actions sections.",
+  "frontend/src/components/ClassificationResults.tsx": "Full results panel displaying detected disease name, animated confidence progress bar, severity badge, symptoms list, and numbered recommended actions with reset button.",
+  "frontend/src/components/ImageUpload.tsx": "Leaf image upload component with crop type selector, drag-and-drop zone with placeholder, image preview with remove option, and analyze button with loading state.",
+  "frontend/src/pages/AnalyzePage.tsx": "Main analysis page with hero banner, feature highlights, split-panel layout for upload form and how-it-works guide, and conditional results display.",
+  "frontend/src/pages/DiseaseLibraryPage.tsx": "Disease library page with search, crop type filter buttons, grouped disease cards by crop type, and empty/loading states.",
+  "frontend/src/pages/ScanHistoryPage.tsx": "Scan history page with summary stats, crop breakdown, expandable history entries showing full disease details, and clear history confirmation dialog.",
+  "frontend/src/App.tsx": "TanStack Router setup with root layout route wrapping all pages (Analyze, Disease Library, Scan History) via the Layout component."
+}
+
+code 7
+
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "AgroDetect AI – Plant Disease Classification Engine Frontend",
+  "requirements": [
+    {
+      "id": "REQ-3",
+      "summary": "Build leaf image upload interface with crop selector, file upload/drag-drop, and image preview",
+      "acceptanceCriteria": [
+        "A crop type selector dropdown is present with at least 6 crop options.",
+        "Users can upload a leaf image via file input or drag-and-drop.",
+        "The uploaded image preview is shown before analysis is triggered.",
+        "A clearly labeled 'Analyze' or 'Detect Disease' button submits the request."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ImageUpload.tsx",
+          "operation": "create",
+          "description": "Create a component that handles leaf image upload with crop type selection dropdown (tomato, potato, corn, wheat, rice, apple), file input with drag-and-drop zone using the generated upload-placeholder.dim_400x300.png from frontend/public/assets/generated/upload-placeholder.dim_400x300.png as the placeholder visual, image preview display, and an 'Analyze Disease' button. Use the blob-storage component to handle image file conversion to ExternalBlob format. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AnalyzePage.tsx",
+          "operation": "create",
+          "description": "Create the main analysis page that renders the ImageUpload component and provides the container layout for the upload interface and results display area."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Display classification results with disease name, confidence bar, color-coded severity badge, symptoms list, and recommended actions",
+      "acceptanceCriteria": [
+        "Disease name is displayed prominently in the results panel.",
+        "Confidence score is shown as a percentage with a visual progress bar.",
+        "Severity badge is color-coded: green for low, orange for medium, red for high.",
+        "Symptoms and recommended actions are listed clearly.",
+        "Results panel appears after analysis completes and replaces a loading state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ClassificationResults.tsx",
+          "operation": "create",
+          "description": "Create a results display component that shows the detected disease name prominently, renders a visual progress bar for confidence score (0-100%), displays a color-coded severity badge (green for low, orange for medium, red for high), lists symptoms as bullet points, and displays recommended corrective actions as actionable items. Include loading and empty states."
+        },
+        {
+          "path": "frontend/src/pages/AnalyzePage.tsx",
+          "operation": "modify",
+          "description": "Integrate the ClassificationResults component into the analyze page layout, manage the analysis submission flow including loading state, call the backend classification function with crop type and image data (ExternalBlob), and handle the results display upon successful classification."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add disease library section listing all known diseases grouped by crop type with expandable details",
+      "acceptanceCriteria": [
+        "A disease library page or section is accessible from the navigation.",
+        "Diseases are grouped or filterable by crop type.",
+        "Each disease entry is expandable to reveal full details.",
+        "Library data is fetched from the backend."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/DiseaseLibraryPage.tsx",
+          "operation": "create",
+          "description": "Create a disease library page that fetches all disease records from the backend, displays them grouped or filterable by crop type, and renders each disease as an expandable card showing disease name, severity badge, and expandable sections for symptoms and recommended actions."
+        },
+        {
+          "path": "frontend/src/components/DiseaseCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable disease card component with expandable/collapsible behavior that displays disease name, affected crop type, severity badge (color-coded), and expandable sections for description, symptoms list, and recommended actions."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add routing configuration for the DiseaseLibraryPage at route '/library', integrate the page into the navigation structure, and ensure the disease library is accessible from the main navigation menu."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Display scan history view listing past analyses with timestamps and ability to review past results",
+      "acceptanceCriteria": [
+        "Each analysis submission is persisted in the backend with all required fields.",
+        "A Scan History view lists all past analyses sorted by most recent.",
+        "Clicking a history entry re-displays the full result details.",
+        "Timestamps are displayed in a human-readable format."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ScanHistoryPage.tsx",
+          "operation": "create",
+          "description": "Create a scan history page that fetches the analysis history from the backend, displays entries sorted by most recent timestamp first, shows crop type, disease name, confidence score, and severity for each entry in a card or table layout, and allows clicking an entry to view full result details including symptoms and recommended actions. Format timestamps in a human-readable format."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add routing configuration for the ScanHistoryPage at route '/history' and integrate it into the main navigation menu so users can access their scan history from the top-level navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply agricultural-themed visual design with earthy greens and warm ambers, clean typography, card-based layouts, and nature-inspired elements",
+      "acceptanceCriteria": [
+        "Primary color palette uses earthy greens and warm ambers consistently.",
+        "Card-based layout is used for disease results and library entries.",
+        "Typography is clean and readable on all screen sizes.",
+        "At least one nature/leaf-inspired decorative visual element is present in the UI."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend the Tailwind theme with a custom agricultural color palette including earthy greens (primary shades) and warm ambers (accent shades), define semantic color names like 'primary', 'accent', 'severity-low' (green), 'severity-medium' (orange), and 'severity-high' (red), and configure clean sans-serif typography settings."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Apply global base styles using the agricultural theme colors, set default typography using clean sans-serif fonts, define card-based layout utility classes with appropriate spacing, borders, and shadows, and add global styling for consistent spacing and readability across all screen sizes."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create a layout component that wraps all pages with a consistent header displaying the AgroDetect AI logo from frontend/public/assets/generated/agrodetect-logo.dim_256x256.png, main navigation links (Analyze, Disease Library, Scan History), and includes the hero banner from frontend/public/assets/generated/hero-banner.dim_1440x400.png on the homepage or as a decorative header element. Add subtle leaf-inspired decorative elements or accents in the layout."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all routes with the Layout component to ensure consistent navigation, branding, and visual design across all pages of the application."
+        }
+      ]
+    }
+  ]
+}
+
+code 8
+
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "AgroDetect AI is a plant disease classification engine that uses transfer learning and pre-trained CNN models to detect crop diseases from leaf images. The app helps farmers and agricultural experts identify diseases early to improve yield quality.",
+  "architectural_notes": [
+    "Uses transfer learning with pre-trained CNN models (e.g., MobileNet, ResNet) for plant disease classification",
+    "Input: leaf images uploaded by users; Output: disease class label with confidence and treatment suggestions"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- AgroDetect AI app logo with a stylized green leaf and magnifying glass icon on a dark green background (agrodetect-logo.dim_256x256.png)\n- Hero banner with a lush agricultural field of crops under golden sunlight, wide landscape format (hero-banner.dim_1440x400.png)\n- Illustrated placeholder for leaf image upload zone showing a single green leaf with dotted border and upload arrow (upload-placeholder.dim_400x300.png)",
+  "existing_features": [
+    {
+      "id": "feature-build-a-leaf-image-upload-interface-on-the-frontend-where-users-can-select-a-crop-type-from-a-dropdown-tomato-potato-corn-wheat-rice-apple-upload-or-drag-and-drop-a-leaf-image-file-and-preview-the-uploaded-image-before-submitting-for-analysis",
+      "title": "Build a leaf image upload interface on the frontend where users can: select a crop type from a dropdown (tomato, potato, corn, wheat, rice, apple), upload or drag-and-drop a leaf image file, and preview the uploaded image before submitting for analysis.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-classification-results-after-analysis-in-a-dedicated-results-panel-the-results-must-show-the-detected-disease-name-prominently-a-visual-confidence-score-bar-percentage-the-severity-level-with-a-color-coded-badge-green-low-orange-medium-red-high-a-list-of-observed-symptoms-and-a-list-of-recommended-corrective-actions-with-actionable-bullet-points",
+      "title": "Display the classification results after analysis in a dedicated results panel. The results must show: the detected disease name prominently, a visual confidence score bar (percentage), the severity level with a color-coded badge (green=low, orange=medium, red=high), a list of observed symptoms, and a list of recommended corrective actions with actionable bullet points.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-disease-library-reference-section-accessible-from-the-main-navigation-that-lists-all-known-diseases-stored-in-the-backend-grouped-by-crop-type-each-entry-should-be-expandable-to-show-symptoms-severity-and-recommended-actions",
+      "title": "Add a disease library/reference section accessible from the main navigation that lists all known diseases stored in the backend, grouped by crop type. Each entry should be expandable to show symptoms, severity, and recommended actions.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-store-a-history-of-past-analyses-in-the-backend-per-session-anonymous-recording-crop-type-timestamp-detected-disease-name-confidence-score-and-severity-display-this-scan-history-in-a-dedicated-scan-history-view-on-the-frontend-with-the-ability-to-re-view-past-results",
+      "title": "Store a history of past analyses in the backend per session (anonymous), recording: crop type, timestamp, detected disease name, confidence score, and severity. Display this scan history in a dedicated 'Scan History' view on the frontend with the ability to re-view past results.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-agricultural-themed-visual-design-across-the-app-earthy-greens-and-warm-ambers-as-the-primary-palette-clean-sans-serif-typography-card-based-layouts-for-results-and-disease-entries-and-subtle-leaf-or-nature-inspired-decorative-elements-the-design-should-feel-professional-and-accessible-to-farmers-and-agricultural-experts",
+      "title": "Apply a cohesive agricultural-themed visual design across the app: earthy greens and warm ambers as the primary palette, clean sans-serif typography, card-based layouts for results and disease entries, and subtle leaf or nature-inspired decorative elements. The design should feel professional and accessible to farmers and agricultural experts.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Leaf image upload for plant disease classification",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "AI-powered disease detection using pre-trained CNN/transfer learning models",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Display classification results with disease name, confidence score, and recommended actions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Support for multiple crop types in disease detection",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Create a backend data model and actor that stores plant disease records, each containing: disease name, affected crop type, description, symptoms, severity level (low/medium/high), and recommended corrective actions. Pre-populate the actor with at least 20 well-known plant diseases across common crops (tomato, potato, corn, wheat, rice, apple).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Implement a backend classification function that accepts a crop type and a simulated image input (base64 string or metadata), and returns a classification result containing: detected disease name, confidence score (0–100%), severity level, symptoms, and recommended actions. Use deterministic heuristic logic based on crop type and input hash to simulate CNN/transfer learning classification in the absence of a real ML runtime.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "AgroDetect AI",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
+
+code 9
+
+# Specification
+
+## Summary
+**Goal:** Build AgroDetect AI, a plant disease classification web app that lets users upload leaf images to detect crop diseases using simulated backend classification logic, with a disease library and scan history.
+
+**Planned changes:**
+- Backend actor with 20+ pre-populated plant disease records (disease name, crop type, description, symptoms, severity, recommended actions) across tomato, potato, corn, wheat, rice, and apple crops
+- Backend classification function accepting crop type and image data (base64), returning deterministic disease name, confidence score (0–100%), severity, symptoms, and recommended actions
+- Backend scan history storage per session (crop type, timestamp, disease name, confidence score, severity)
+- Frontend leaf image upload interface with crop type dropdown (6 crops), drag-and-drop file input, image preview, and "Detect Disease" submit button
+- Classification results panel showing disease name, confidence progress bar, color-coded severity badge (green/orange/red), symptoms list, and recommended actions list
+- Disease library page accessible from navigation, listing all diseases grouped by crop type with expandable entries showing full details
+- Scan history view listing past analyses sorted by most recent, with clickable entries to re-display full results
+- Agricultural-themed design using earthy greens and warm ambers, card-based layouts, clean typography, and leaf-inspired decorative elements
+
+**User-visible outcome:** Users can select a crop type, upload a leaf image, and receive a detailed disease classification result. They can browse a full disease reference library and review their past scan history.
+
+
+code 10 
+
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-26T04:48:10.823Z",
+  "summary": "The diff implements a substantial portion of the AgroDetect AI requirements as a primarily frontend-only solution with a static disease database. The backend actor (backend/main.mo) is a generic blob-storage actor with no disease-related logic, meaning all backend requirements are unmet. The frontend implements most UI requirements using local/static data, but the backend integration is absent entirely.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Create a backend data model and actor that stores plant disease records with all required fields, pre-populated with at least 20 diseases across 6+ crop types, and a query function filterable by crop type.",
+      "reason": "The backend/main.mo is a generic blob-storage actor with no disease data model, no disease records, no pre-population, and no disease query functions. The disease database lives entirely in frontend/src/lib/diseaseData.ts as a static frontend array.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/lib/diseaseData.ts"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Implement a backend classification function that accepts crop type and image data and returns a deterministic classification result with disease name, confidence score, severity, symptoms, and recommended actions.",
+      "reason": "No such function exists in backend/main.mo. Classification is performed entirely in the frontend via classifyDisease() in frontend/src/lib/diseaseData.ts with no backend call.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/lib/diseaseData.ts",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Library data must be fetched from the backend.",
+      "reason": "The DiseaseLibraryPage fetches data via useGetDiseases which reads from the static DISEASE_DATABASE in frontend/src/lib/diseaseData.ts, not from the backend actor.",
+      "evidence": [
+        "frontend/src/pages/DiseaseLibraryPage.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/lib/diseaseData.ts"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Each analysis submission must be persisted in the backend with all required fields (crop type, timestamp, detected disease name, confidence score, severity).",
+      "reason": "Scan history is stored in localStorage via saveScanToHistory() in frontend/src/lib/diseaseData.ts, not in the backend actor. The backend/main.mo has no history storage capability.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/lib/diseaseData.ts",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Generic blob-storage backend actor with addFile/removeFile functions and MixinStorage mixin",
+      "reason": "The build request required a plant disease backend actor. Instead, backend/main.mo implements an unrelated file storage actor that was never requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Search functionality in the Disease Library page allowing text search by disease name and description",
+      "reason": "The build request did not specify a search/text filter for the disease library; only grouping/filtering by crop type was required.",
+      "evidence": [
+        "frontend/src/pages/DiseaseLibraryPage.tsx"
+      ]
+    },
+    {
+      "description": "Clear scan history feature with confirmation dialog in the Scan History page",
+      "reason": "The build request did not mention the ability to clear or delete scan history entries.",
+      "evidence": [
+        "frontend/src/pages/ScanHistoryPage.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "description": "Summary statistics and crop breakdown panel in the Scan History page",
+      "reason": "The build request only required listing past analyses sorted by most recent with re-view capability; aggregate stats were not requested.",
+      "evidence": [
+        "frontend/src/pages/ScanHistoryPage.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.91,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/ClassificationResults.tsx",
+    "frontend/src/components/DiseaseCard.tsx",
+    "frontend/src/components/ImageUpload.tsx",
+    "frontend/src/components/Layout.tsx",
+    "frontend/src/components/SeverityBadge.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/diseaseData.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AnalyzePage.tsx",
+    "frontend/src/pages/DiseaseLibraryPage.tsx",
+    "frontend/src/pages/ScanHistoryPage.tsx",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
+
+code 11
+
+import List "mo:core/List";
+import Text "mo:core/Text";
+
+import MixinStorage "blob-storage/Mixin";
+
+actor {
+  include MixinStorage();
+  let files = List.empty<Text>();
+
+  public shared ({ caller }) func addFile(file : Text) : async () {
+    files.add(file);
+  };
+
+  public shared ({ caller }) func removeFile(file : Text) : async () {
+    let filteredFiles = files.filter(func(f) { f != file });
+    files.clear();
+    files.addAll(filteredFiles.values());
+  };
+};
